@@ -1,0 +1,25 @@
+
+div#app-container {
+}
+
+div#app-header {
+  height: 70px;
+}
+
+div#app-content {
+  /* previous syntax */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  box-flex: 1;
+
+  /* current syntax */
+  -webkit-flex: 1;
+  -moz-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+div#app-footer {
+  height: 70px;
+}
