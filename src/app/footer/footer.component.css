@@ -1,0 +1,16 @@
+#footer-container {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}
+
+footer {
+  height: 100%;
+}
+
+.footer-item {
+  flex: 0 1 auto;
+  align-self: auto;
+  padding: 0 20px;
+}

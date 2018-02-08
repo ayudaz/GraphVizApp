@@ -6,12 +6,13 @@ import { EditorComponent } from './editor/editor.component';
 import { GraphvizComponent } from './graphviz/graphviz.component';
 import { HeaderComponent } from './header/header.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {MatDividerModule, MatSnackBarModule, MatToolbarModule} from '@angular/material';
+import {MatButtonModule, MatDividerModule, MatIconModule, MatSnackBarModule, MatToolbarModule} from '@angular/material';
 import {AngularSplitModule} from 'angular-split';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {DataService} from './data.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FooterComponent } from './footer/footer.component';
+import {FileUploadModule} from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
@@ -28,8 +29,11 @@ import { FooterComponent } from './footer/footer.component';
     AngularSplitModule,
     AceEditorModule,
     MatSnackBarModule,
+    MatButtonModule,
+    MatIconModule,
     BrowserAnimationsModule,
     NgbModule.forRoot(),
+    FileUploadModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]

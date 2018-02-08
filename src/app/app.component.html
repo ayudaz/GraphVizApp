@@ -2,12 +2,12 @@
   <div id="app-header">
     <app-header></app-header>
   </div>
-  <div id="app-content">
+  <div id="app-content" class="mat-app-background">
     <split>
-      <split-area size="30">
+      <split-area [size]="30">
         <app-editor></app-editor>
       </split-area>
-      <split-area size="70">
+      <split-area [size]="70">
         <app-graphviz></app-graphviz>
       </split-area>
     </split>

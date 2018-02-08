@@ -1,0 +1,16 @@
+<div id="editor-container" class="vbox viewport">
+  <div id="editor-menu" class="primary-bg-300">
+    <div class="hbox viewport space-between">
+      <button mat-button (click)="download()">
+        <mat-icon>file_download</mat-icon>
+      </button>
+      <button mat-button ng2FileSelect [uploader]="uploader" >
+        <mat-icon>file_upload</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div id="editor-content" class="viewport">
+    <ace-editor [text]="content" #editor (textChanged)="onChangeEditor($event)">
+    </ace-editor>
+  </div>
+</div>

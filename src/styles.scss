@@ -76,6 +76,15 @@ $primary: mat-palette($mat-indigo, 600, 500, 900);
 $accent: mat-palette($mat-pink, A400, A300, A600);
 
 .primary-bg {
-  background-color: mat-color($primary);
-  color: #ffffff;
+  background-color: mat-color($primary,500);
+  color: #fff;
+}
+
+.primary-bg-300 {
+  background-color: mat-color($primary,300);
+  color: #fff;
+}
+
+.app-font {
+  font : 20px/32px Roboto, "Helvetica Neue", sans-serif;
 }
