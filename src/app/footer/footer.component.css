@@ -14,3 +14,11 @@ footer {
   align-self: auto;
   padding: 0 20px;
 }
+div#footer-learn a {
+  text-decoration: none;
+  color: inherit;
+}
+
+div#footer-learn a:hover {
+  text-decoration: underline;
+}

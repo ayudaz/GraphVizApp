@@ -6,7 +6,7 @@ import { EditorComponent } from './editor/editor.component';
 import { GraphvizComponent } from './graphviz/graphviz.component';
 import { HeaderComponent } from './header/header.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {MatButtonModule, MatDividerModule, MatIconModule, MatSnackBarModule, MatToolbarModule} from '@angular/material';
+import {MatButtonModule, MatDividerModule, MatIconModule, MatSelectModule, MatSnackBarModule, MatToolbarModule} from '@angular/material';
 import {AngularSplitModule} from 'angular-split';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {DataService} from './data.service';
@@ -33,7 +33,8 @@ import {FileUploadModule} from 'ng2-file-upload';
     MatIconModule,
     BrowserAnimationsModule,
     NgbModule.forRoot(),
-    FileUploadModule
+    FileUploadModule,
+    MatSelectModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]

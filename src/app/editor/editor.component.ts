@@ -2,7 +2,8 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {AceEditorComponent} from 'ng2-ace-editor';
 import {DataService} from '../data.service';
 import {saveAs} from 'file-saver';
-import { FileUploader} from 'ng2-file-upload';
+import {FileUploader} from 'ng2-file-upload';
+import {MatSnackBar} from '@angular/material';
 
 const URL = '/api/';
 
@@ -18,7 +19,8 @@ export class EditorComponent implements AfterViewInit, OnInit {
 
   uploader = new FileUploader({url: URL});
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, public snackBar: MatSnackBar) {
+  }
 
   ngOnInit(): void {
     this.data.currentGraphSrc.subscribe(graphSrcTxt => this.content = graphSrcTxt);
@@ -44,7 +46,10 @@ export class EditorComponent implements AfterViewInit, OnInit {
   }
 
   download() {
-    console.log("download !!!");
-    saveAs(new Blob([this.content], { type: 'text' }), 'graph.dot');
+    saveAs(new Blob([this.content], {type: 'text'}), 'graph.dot');
+  }
+
+  upload() {
+    this.snackBar.open('not yet implemented !', 'Fermer', {duration: 2000});
   }
 }

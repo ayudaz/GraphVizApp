@@ -2,7 +2,8 @@ import {AfterViewInit, Component, ElementRef, ErrorHandler, OnInit, ViewChild} f
 import 'viz.js';
 import * as SvgPanZoom from 'svg-pan-zoom';
 import {DataService} from '../data.service';
-import {MatSnackBar} from '@angular/material';
+import {MatSelectChange, MatSnackBar} from '@angular/material';
+
 declare var Viz: any;
 
 @Component({
@@ -14,31 +15,89 @@ export class GraphvizComponent implements OnInit, AfterViewInit, ErrorHandler {
 
 
   @ViewChild('graph') graph: ElementRef;
+
+
+  selectedEngine: string;
+  selectedFormat: string;
+
+  engines = [
+    {value: 'circo', viewValue: 'circo'},
+    {value: 'dot', viewValue: 'dot'},
+    {value: 'fdp', viewValue: 'fdp'},
+    {value: 'neato', viewValue: 'neato'},
+    {value: 'osage', viewValue: 'osage'},
+    {value: 'twopi', viewValue: 'twopi'}
+  ];
+
+  formats = [
+    {value: 'svg', viewValue: 'svg'},
+    {value: 'png-image-element', viewValue: 'png'},
+    {value: 'json', viewValue: 'json'},
+    {value: 'xdot', viewValue: 'xdot'},
+    {value: 'plain', viewValue: 'plain'},
+    {value: 'ps', viewValue: 'ps'}
+  ];
+
   private result;
   private parser: DOMParser;
+  private graphTxt: string;
+
   constructor(private data: DataService, public snackBar: MatSnackBar) {
     this.parser = new DOMParser();
   }
 
   ngOnInit(): void {
-    this.data.currentGraphSrc.subscribe(graphSrcTxt => this.updateGraph(graphSrcTxt));
+    this.selectedEngine = 'dot';
+    this.selectedFormat = 'svg';
+    this.data.currentGraphSrc.subscribe(graphSrcTxt => this.updateGraphContent(graphSrcTxt));
   }
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() {
+  }
 
-  updateGraph(graphSrcTxt: string) {
+  updateGraphContent(graphSrcTxt: string) {
+    this.graphTxt = graphSrcTxt;
+    this.updateGraph();
+  }
 
-    let svg: HTMLElement = this.graph.nativeElement.querySelector('svg');
-    if (svg) {
-      this.graph.nativeElement.removeChild(svg);
-    }
+  updateGraph() {
+
     try {
-      this.result = Viz(graphSrcTxt);
+      this.result = Viz(this.graphTxt, {engine: this.selectedEngine, format: this.selectedFormat});
     } catch (error) {
       this.handleError(error);
     }
 
-    svg = this.parser.parseFromString(this.result, 'image/svg+xml').documentElement;
+    this.cleanOutput();
+    if (this.selectedFormat === 'svg') {
+      this.svgOutput();
+    } else if (this.selectedFormat === 'png-image-element') {
+      this.pngOutput();
+    } else {
+      this.snackBar.open('not yet implemented !', 'Fermer', {duration: 2000});
+    }
+  }
+
+  handleError(error: any): void {
+    console.log(error.message);
+    this.snackBar.open(error.message, 'Fermer', {duration: 2000});
+  }
+
+  changeEngine(event: MatSelectChange) {
+    this.selectedEngine = event.value;
+    this.updateGraph();
+  }
+
+  changeFormat(event: MatSelectChange) {
+    this.selectedFormat = event.value;
+    this.updateGraph();
+  }
+
+  downloadImage() {
+    this.snackBar.open('not yet implemented !', 'Fermer', {duration: 2000});
+  }
+  private svgOutput() {
+    const svg = this.parser.parseFromString(this.result, 'image/svg+xml').documentElement;
     svg.id = 'graph_svg';
     const origWidth = svg.getAttribute('width');
     const origHeigth = svg.getAttribute('height');
@@ -57,8 +116,20 @@ export class GraphvizComponent implements OnInit, AfterViewInit, ErrorHandler {
     svgPanZoom.setMinZoom(0.1);
   }
 
-  handleError(error: any): void {
-    console.log(error.message);
-    this.snackBar.open(error.message, 'Fermer', {duration: 2000});
+  private pngOutput() {
+    const png = this.result;
+    png.setAttribute('class', 'img-center');
+    this.graph.nativeElement.appendChild(png);
+  }
+
+  private cleanOutput() {
+    const svg = this.graph.nativeElement.querySelector('svg');
+    if (svg) {
+      this.graph.nativeElement.removeChild(svg);
+    }
+    const png = this.graph.nativeElement.querySelector('img');
+    if (png) {
+      this.graph.nativeElement.removeChild(png);
+    }
   }
 }

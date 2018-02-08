@@ -1,5 +1,28 @@
-<div id="graph-container">
-  <div id="graph-location" #graph>
+<div id="graph-container" class="vbox viewport">
+  <div id="graph-menu" class="primary-bg-300">
+    <div id="graph-menu-container" class="hbox viewport">
+      <div id="graph-menu-subcontainer-1" class="hbox">
+        <mat-select placeholder="Engine" [value]="selectedEngine" (selectionChange)="changeEngine($event)">
+          <mat-option *ngFor="let engine of engines" [value]="engine.value">
+            {{engine.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-select placeholder="Format" [value]="selectedFormat" (selectionChange)="changeFormat($event)">
+          <mat-option *ngFor="let format of formats" [value]="format.value">
+            {{format.viewValue}}
+          </mat-option>
+        </mat-select>
+      </div>
+      <div id="graph-menu-subcontainer-2" class="hbox">
+        <button mat-button (click)="downloadImage()">
+          <mat-icon>file_download</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="graph-location-container">
+    <div id="graph-location" #graph>
       <svg id="graph_svg"></svg>
+    </div>
   </div>
 </div>
