@@ -7,7 +7,12 @@ pipeline {
     
   }
   stages {
-    stage('angular build') {
+    stage('npm install') {
+      steps {
+        sh 'npm install'
+      }
+    }
+    stage('build angular app') {
       steps {
         sh 'ng build --prod --base-href=graphvizapp'
       }
