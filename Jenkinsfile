@@ -4,17 +4,21 @@ pipeline {
       args '-p 3000:3000'
       image 'trion/ng-cli'
     }
-    
+
   }
   stages {
-    stage('npm install') {
+    stage('build App') {
       steps {
         sh 'npm install'
+        sh 'ng build --prod --base-href=graphvizapp'
       }
     }
-    stage('build angular app') {
+    stage('docker build') {
+      agent { dockerfile true }
       steps {
-        sh 'ng build --prod --base-href=graphvizapp'
+        docker build -t graphvizapp.
+        docker tag graphvizapp ayudaz/graphvizapp
+        docker push ayudaz/graphvizapp
       }
     }
   }
