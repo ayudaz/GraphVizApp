@@ -7,14 +7,13 @@ pipeline {
 
   }
   stages {
-    stage('build App') {
+    stage('npm install') {
       steps {
         sh 'npm install'
         sh 'ng build --prod --base-href=graphvizapp'
       }
     }
-    stage('docker build') {
-      agent { dockerfile true }
+    stage('build angular app') {
       steps {
         docker build -t graphvizapp.
         docker tag graphvizapp ayudaz/graphvizapp
