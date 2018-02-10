@@ -3,7 +3,7 @@ div#app-container {
 }
 
 div#app-header {
-  height: 70px;
+  flex: 0 70px;
 }
 
 div#app-content {
@@ -11,6 +11,5 @@ div#app-content {
 }
 
 div#app-footer {
-  flex: 1;
-  height: 70px;
+  flex: 0 70px;
 }

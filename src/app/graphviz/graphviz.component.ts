@@ -1,8 +1,10 @@
-import {AfterViewInit, Component, ElementRef, ErrorHandler, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ErrorHandler, HostListener, OnInit, ViewChild} from '@angular/core';
 import 'viz.js';
 import * as SvgPanZoom from 'svg-pan-zoom';
 import {DataService} from '../data.service';
 import {MatSelectChange, MatSnackBar} from '@angular/material';
+import {saveAs} from 'file-saver';
+import {imgSrcToBlob} from 'blob-util';
 
 declare var Viz: any;
 
@@ -31,11 +33,11 @@ export class GraphvizComponent implements OnInit, AfterViewInit, ErrorHandler {
 
   formats = [
     {value: 'svg', viewValue: 'svg'},
-    {value: 'png-image-element', viewValue: 'png'},
-    {value: 'json', viewValue: 'json'},
+    {value: 'png-image-element', viewValue: 'png'}
+    /*{value: 'json', viewValue: 'json'},
     {value: 'xdot', viewValue: 'xdot'},
     {value: 'plain', viewValue: 'plain'},
-    {value: 'ps', viewValue: 'ps'}
+    {value: 'ps', viewValue: 'ps'}*/
   ];
 
   private result;
@@ -60,6 +62,7 @@ export class GraphvizComponent implements OnInit, AfterViewInit, ErrorHandler {
     this.updateGraph();
   }
 
+  @HostListener('window:resize')
   updateGraph() {
 
     try {
@@ -69,12 +72,35 @@ export class GraphvizComponent implements OnInit, AfterViewInit, ErrorHandler {
     }
 
     this.cleanOutput();
-    if (this.selectedFormat === 'svg') {
-      this.svgOutput();
-    } else if (this.selectedFormat === 'png-image-element') {
-      this.pngOutput();
-    } else {
-      this.snackBar.open('not yet implemented !', 'Fermer', {duration: 2000});
+
+    switch (this.selectedFormat) {
+      case 'svg': {
+        this.svgOutput();
+        break;
+      }
+      case 'png-image-element': {
+        this.pngOutput();
+        break;
+      }
+      case 'json': {
+        this.jsonOutput();
+        break;
+      }
+      case 'xdot': {
+        this.xdotOutput();
+        break;
+      }
+      case 'plain': {
+        this.plainOutput();
+        break;
+      }
+      case 'ps': {
+        this.psOutput();
+        break;
+      }
+      default: {
+        this.snackBar.open('wrong choice !!!', 'Fermer', {duration: 2000});
+      }
     }
   }
 
@@ -94,15 +120,27 @@ export class GraphvizComponent implements OnInit, AfterViewInit, ErrorHandler {
   }
 
   downloadImage() {
-    this.snackBar.open('not yet implemented !', 'Fermer', {duration: 2000});
+
+    if (this.selectedFormat === 'png-image-element') {
+      imgSrcToBlob(this.result.getAttribute('src')).then(function (blob) {
+        saveAs(blob, 'graph.png');
+      }).catch(function (err) {
+        console.log(err);
+      });
+    } else if (this.selectedFormat === 'svg') {
+      saveAs(new Blob([this.result], {type: 'image/svg+xml'}), 'graph.svg');
+    } else {
+      this.snackBar.open('not yet implemented !', 'Fermer', {duration: 2000});
+    }
   }
+
   private svgOutput() {
     const svg = this.parser.parseFromString(this.result, 'image/svg+xml').documentElement;
     svg.id = 'graph_svg';
     const origWidth = svg.getAttribute('width');
     const origHeigth = svg.getAttribute('height');
     svg.setAttribute('width', '100%');
-    svg.setAttribute('height', '100%');
+    svg.setAttribute('height', '99%');
     svg.setAttribute('viewBox', '0 0 ' + origWidth + ' ' + origHeigth);
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     this.graph.nativeElement.appendChild(svg);
@@ -119,7 +157,36 @@ export class GraphvizComponent implements OnInit, AfterViewInit, ErrorHandler {
   private pngOutput() {
     const png = this.result;
     png.setAttribute('class', 'img-center');
-    this.graph.nativeElement.appendChild(png);
+    const divPng = document.createElement('div');
+    divPng.id = 'graph_png';
+    divPng.setAttribute('class', 'img-center-container');
+    divPng.appendChild(png);
+    this.graph.nativeElement.appendChild(divPng);
+  }
+
+  private jsonOutput() {
+    this.textOutput();
+  }
+
+  private xdotOutput() {
+    this.textOutput();
+  }
+
+  private plainOutput() {
+    this.textOutput();
+  }
+
+  private psOutput() {
+    this.textOutput();
+  }
+
+  private textOutput() {
+    const txt = this.result;
+    const divTxt = document.createElement('div');
+    divTxt.id = 'graph_txt';
+    divTxt.setAttribute('class', 'txt-container');
+    divTxt.appendChild(document.createTextNode(txt));
+    this.graph.nativeElement.appendChild(divTxt);
   }
 
   private cleanOutput() {
@@ -127,9 +194,13 @@ export class GraphvizComponent implements OnInit, AfterViewInit, ErrorHandler {
     if (svg) {
       this.graph.nativeElement.removeChild(svg);
     }
-    const png = this.graph.nativeElement.querySelector('img');
+    const png = this.graph.nativeElement.querySelector('#graph_png');
     if (png) {
       this.graph.nativeElement.removeChild(png);
+    }
+    const txt = this.graph.nativeElement.querySelector('#graph_txt');
+    if (txt) {
+      this.graph.nativeElement.removeChild(txt);
     }
   }
 }

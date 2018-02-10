@@ -1,17 +1,10 @@
-div#graph-location {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  line-height: 50;
-}
+
 div#graph-container {
   width: 100%;
   height: 100%;
 }
 div#graph-menu {
-  height: 40px;
-}
-div#graph-menu-container {
+  flex: 0 40px;
 }
 
 div#graph-menu-subcontainer-1 {
@@ -32,7 +25,11 @@ div#graph-menu-subcontainer-2 {
   align-content: center;
 }
 
-div#graph-location-container {
+div#graph-location {
   flex: 1;
 }
 
+div#graph-location-container {
+  overflow: auto;
+  height: 100%;
+}

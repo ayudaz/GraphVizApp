@@ -1,6 +1,6 @@
 <div id="graph-container" class="vbox viewport">
   <div id="graph-menu" class="primary-bg-300">
-    <div id="graph-menu-container" class="hbox viewport">
+    <div id="graph-menu-content" class="hbox viewport">
       <div id="graph-menu-subcontainer-1" class="hbox">
         <mat-select placeholder="Engine" [value]="selectedEngine" (selectionChange)="changeEngine($event)">
           <mat-option *ngFor="let engine of engines" [value]="engine.value">
@@ -20,9 +20,9 @@
       </div>
     </div>
   </div>
-  <div id="graph-location-container">
-    <div id="graph-location" #graph>
-      <svg id="graph_svg"></svg>
+  <div id="graph-location">
+    <div id="graph-location-content" class="vbox viewport">
+      <div id="graph-location-container" #graph></div>
     </div>
   </div>
 </div>
